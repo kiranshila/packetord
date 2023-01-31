@@ -111,6 +111,7 @@ fn main() {
             counts[packets] = pl.count;
             packets += 1;
         } else {
+            eprintln!("Bad packet???");
             continue;
         }
     }
