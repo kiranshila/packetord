@@ -82,7 +82,7 @@ impl Payload {
     }
 }
 
-const CAP_PACKS: usize = 100_000_000;
+const CAP_PACKS: usize = 10_000_000;
 
 fn main() {
     let device = pcap::Device::list()
@@ -95,7 +95,9 @@ fn main() {
         .expect("Failed to create capture")
         .buffer_size(33_554_432) // Up to 20ms
         .open()
-        .expect("Failed to open the capture");
+        .expect("Failed to open the capture")
+        .setnonblock()
+        .unwrap();
     // Add the port filter
     cap.filter("dst port 60000", true)
         .expect("Error creating port filter");
@@ -105,14 +107,15 @@ fn main() {
 
     // Grab 10_000_000 payloads
     while packets < CAP_PACKS {
-        let p = cap.next_packet().unwrap();
-        if p.data.len() == (PAYLOAD_SIZE + UDP_HEADER_SIZE) {
-            let pl = Payload::from_bytes(&p.data[UDP_HEADER_SIZE..]);
-            counts[packets] = pl.count;
-            packets += 1;
-        } else {
-            eprintln!("Bad packet???");
-            continue;
+        if let Ok(p) = cap.next_packet() {
+            if p.data.len() == (PAYLOAD_SIZE + UDP_HEADER_SIZE) {
+                let pl = Payload::from_bytes(&p.data[UDP_HEADER_SIZE..]);
+                counts[packets] = pl.count;
+                packets += 1;
+            } else {
+                eprintln!("Bad packet???");
+                continue;
+            }
         }
     }
 
