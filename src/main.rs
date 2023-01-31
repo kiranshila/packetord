@@ -82,7 +82,7 @@ impl Payload {
     }
 }
 
-const CAP_PACKS: usize = 1000;
+const CAP_PACKS: usize = 1_000_000;
 
 fn main() {
     let device = pcap::Device::list()
@@ -117,7 +117,8 @@ fn main() {
     }
 
     counts.sort();
-    let deltas: Vec<_> = counts.windows(2).map(|x| x[1] - x[0]).collect();
-
+    let mut deltas: Vec<_> = counts.windows(2).map(|x| x[1] - x[0]).collect();
+    deltas.sort();
+    let deltas: Vec<_> = deltas.iter().dedup_with_count().collect();
     dbg!(deltas);
 }
