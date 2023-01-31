@@ -100,7 +100,7 @@ fn main() {
     cap.filter("dst port 60000", true)
         .expect("Error creating port filter");
 
-    let mut counts = [0u64; CAP_PACKS];
+    let mut counts = vec![0u64; CAP_PACKS];
     let mut packets = 0usize;
 
     // Grab 10_000_000 payloads
