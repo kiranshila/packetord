@@ -115,14 +115,14 @@ fn main() {
                 counts[packets] = pl.count;
                 packets += 1;
             } else {
-                eprintln!("Bad packet???");
+                println!("Bad packet???");
                 continue;
             }
         }
         let stats = cap.stats().unwrap();
         let dropped = stats.dropped + stats.if_dropped;
         if dropped > last_dropped {
-            eprintln!("Dropping packets!!");
+            println!("Dropping packets!!");
             last_dropped = dropped;
         }
     }
