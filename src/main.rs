@@ -105,6 +105,8 @@ fn main() {
     let mut counts = vec![0u64; CAP_PACKS];
     let mut packets = 0usize;
 
+    let mut last_dropped = 0;
+
     // Grab 10_000_000 payloads
     while packets < CAP_PACKS {
         if let Ok(p) = cap.next_packet() {
@@ -116,6 +118,12 @@ fn main() {
                 eprintln!("Bad packet???");
                 continue;
             }
+        }
+        let stats = cap.stats().unwrap();
+        let dropped = stats.dropped + stats.if_dropped;
+        if dropped > last_dropped {
+            eprintln!("Dropping packets!!");
+            last_dropped = dropped;
         }
     }
 
