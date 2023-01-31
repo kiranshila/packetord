@@ -116,7 +116,7 @@ fn main() {
     }
 
     counts.sort();
-    let deltas = counts.windows(2).map(|x| x[1] - x[0]).dedup_with_count();
+    let deltas: Vec<_> = counts.windows(2).map(|x| x[1] - x[0]).collect();
 
-    dbg!(counts);
+    dbg!(deltas);
 }
