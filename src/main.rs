@@ -82,7 +82,7 @@ impl Payload {
     }
 }
 
-const CAP_PACKS: usize = 10_000_000;
+const CAP_PACKS: usize = 100_000_000;
 
 fn main() {
     let device = pcap::Device::list()
