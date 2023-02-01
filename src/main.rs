@@ -9,7 +9,7 @@ pub const PAYLOAD_SIZE: usize = SPECTRA_SIZE + TIMESTAMP_SIZE;
 // UDP Header size (spec-defined)
 const UDP_HEADER_SIZE: usize = 42;
 
-const CAP_PACKS: usize = 1_000_000;
+const CAP_PACKS: usize = 100;
 
 fn main() {
     let device = pcap::Device::list()
@@ -50,6 +50,7 @@ fn main() {
         }
     }
     counts.sort();
+    dbg!(&counts);
     let mut deltas: Vec<_> = counts.windows(2).map(|x| x[1] - x[0]).collect();
     deltas.sort();
     let deltas: Vec<_> = deltas.iter().dedup_with_count().collect();
